@@ -18,6 +18,10 @@
     (doop (params :op) 
 	  (. Float valueOf (params :ls))
 	  (. Float valueOf (params :rs))))
+  (GET "/i/:op/:ls/:rs" 
+    (doop (params :op) 
+	  (. Integer valueOf (params :ls))
+	  (. Integer valueOf (params :rs))))
   (ANY "/*" "Bad URL"))
 
 (defserver lang-server
@@ -25,4 +29,4 @@
    "/*" (servlet calc))
 
 (start lang-server)
-;; --> (stop my-server)
+;; --> (stop lang-server)
