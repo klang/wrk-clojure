@@ -1,0 +1,4 @@
+cd ~/lisp/clj
+mkdir -p src/compojure/myapp/WEB-INF/{lib,classes}
+
+cp compojure/compojure.jar compojure/deps/clojure-contrib.jar compojure/deps/clojure.jar src/compojure/myapp/WEB-INF/lib/

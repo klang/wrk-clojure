@@ -1,0 +1,28 @@
+Example found at:
+
+http://ericlavigne.wordpress.com/2008/12/28/using-postgresql-with-compojure/
+
+apt-get install postgresql
+
+sudo -u postgres /usr/lib/postgresql/8.3/bin/initdb -D /var/lib/postgresql/data
+sudo -u postgres mkdir /var/lib/postgresql/log
+sudo -u postgres /usr/lib/postgresql/8.3/bin/pg_ctl -D /var/lib/postgresql/data -l /var/lib/postgresql/log/postgres.log start
+#sudo -u postgres createdb -O postgres production
+
+Success. You can now start the database server using:
+
+    /usr/lib/postgresql/8.3/bin/postgres -D /var/lib/postgresql/data
+or
+    /usr/lib/postgresql/8.3/bin/pg_ctl -D /var/lib/postgresql/data -l logfile start
+
+export PGDATA=/var/lib/postgresql/data
+
+klang@x40:~$ finger postgres
+Login: postgres       			Name: PostgreSQL administrator
+Directory: /var/lib/postgresql      	Shell: /bin/bash
+Never logged in.
+No mail.
+
+--shell=/bin/bash
+
+sudo apt-get remove postgresql

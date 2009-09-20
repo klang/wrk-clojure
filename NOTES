@@ -1,0 +1,4 @@
+(show "abc")
+(source first)
+(doc reduce)
+(find-doc #"list(s?)")

@@ -1,0 +1,6 @@
+# interesting stuff that we can safely keep on the net
+git clone git://github.com/stuarthalloway/practical-cl-clojure
+git clone git://github.com/stuarthalloway/programming-clojure.git
+git clone git://github.com/pcalcado/my-best-mate.git
+git clone git://github.com/duelinmarkers/appengine-clj.git
+git clone git://github.com/larrytheliquid/buzzer.git

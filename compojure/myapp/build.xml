@@ -1,0 +1,28 @@
+<project name="myapp" basedir="." default="war">
+   <property name="build.dir" value="WEB-INF/classes" />
+   <property name="source.dir" value="src" />
+   <property name="lib.dir" value="WEB-INF/lib" />
+   <property name="servlet-api.jar" value="/usr/share/java/servlet-2.3.jar" />
+   <property name="warfile" value="myapp.war" />
+ 
+   <target name="compile">
+     <java classname="clojure.lang.Compile">
+       <classpath>
+         <path location="${build.dir}"/>
+         <path location="${source.dir}"/>
+         <fileset dir="${lib.dir}">
+           <include name="*.jar"/>
+         </fileset>
+         <path location="${servlet-api.jar}"/>
+       </classpath>
+       <sysproperty key="clojure.compile.path" value="${build.dir}"/>
+       <arg value="myapp.MyServlet"/>
+     </java>
+   </target>
+ 
+   <target name="war" depends="compile">
+     <war warfile="${warfile}" webxml="WEB-INF/web.xml">
+       <classes dir="${build.dir}"/>
+     </war>
+   </target>
+ </project>
