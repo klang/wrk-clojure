@@ -12,6 +12,11 @@
   (if (contains? op-mapping op)
     (str ((get op-mapping op) ls rs))
     "Unrecognized operation"))
+(defn hello-world []   
+  (html [:head 
+	 [:title "Hello World"]]
+	[:body [:h1 "Hello there"]])
+  )
 
 (defroutes calc
   (GET "/:op/:ls/:rs" 
@@ -22,6 +27,7 @@
     (doop (params :op) 
 	  (. Integer valueOf (params :ls))
 	  (. Integer valueOf (params :rs))))
+  (GET "/yo" (hello-world))
   (ANY "/*" "Bad URL"))
 
 (defserver lang-server
