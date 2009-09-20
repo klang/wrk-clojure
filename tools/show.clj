@@ -8,7 +8,9 @@
 	'(java.lang.reflect Modifier Method Constructor)
 	'(clojure.lang RT))
 
-(use 'clojure.contrib.javadoc)
+;(use 'clojure.contrib.javadoc)
+;(use 'clojure.contrib.repl-utils)
+;*local-javadocs*
 
 (defn show
   ([x] (show x nil))
