@@ -12,11 +12,11 @@
   (if (contains? op-mapping op)
     (str ((get op-mapping op) ls rs))
     "Unrecognized operation"))
+
 (defn hello-world []   
   (html [:head 
 	 [:title "Hello World"]]
-	[:body [:h1 "Hello there"]])
-  )
+	[:body [:h1 "Hello there"]]))
 
 (defroutes calc
   (GET "/:op/:ls/:rs" 
