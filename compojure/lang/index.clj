@@ -54,17 +54,36 @@
 	 [:title "Hello World"]]
 	[:body [:h1 "Hello there"]]))
 
-(defn the-grue []   
-  (html [:head 
-	 [:title "you were eaten by a grue"]]
-	[:body [:h1 "you were eaten by a grue"]]))
+(defn centered-message 
+  "takes a status and a message and returns html to center the information on the screen"
+  [s m]   
+  (html 
+   [:head 
+    [:title (if s s m)]
+    [:style 
+     {:type "text/css"}
+     "<!-- A:link {text-decoration: none}A:visited{text-decoration:none}A:active{text-decoration:none}-->"]]
+   [:body {:bgcolor "black" :text "white" :link "white" :vlink "white" :alink "red"}
+    [:center [:table {:width "100%" :height "100%" :bgcolor "black"}
+	      [:tr {:align "center" :valign "center"}
+	       [:td {:align "center" :valign "center"} 
+		[:center [:p [:tt "[ " (if s (html s " - ") nil) m " ]"]]]]]]]]))
+
+(defn the-grue []
+  (centered-message 
+   "404"
+   (html "You have been eaten by a " [:a {:href "http://en.wikipedia.org/wiki/Grue_%28monster%29"} "grue"] "..")))
+
+(defn hello-world-centered [] 
+  (centered-message nil "Hello World")
+  )
 
 (defroutes lang
   (GET "/karsten" (karsten))
-  (GET "/karsten/computer" (hello-world))
+  (GET "/karsten/computer/" (centered-message "404" "nothing to see here"))
   (GET "/karsten/*" (the-grue))
-  (GET "/hello" (hello-world))
-  (ANY "/*" "Bad URL"))
+  (GET "/hello" (hello-world-centered))
+  (ANY "/*" (hello-world)))
 
 (defserver lang-server
    {:port 8080}
