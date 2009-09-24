@@ -67,7 +67,7 @@
     [:center [:table {:width "100%" :height "100%" :bgcolor "black"}
 	      [:tr {:align "center" :valign "center"}
 	       [:td {:align "center" :valign "center"} 
-		[:center [:p [:tt "[ " (if s (html s " - ") nil) m " ]"]]]]]]]]))
+		[:center [:p [:tt "[ " (if s (str s " - ") nil) m " ]"]]]]]]]]))
 
 (defn the-grue []
   (centered-message 
