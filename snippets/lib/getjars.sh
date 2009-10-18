@@ -1,0 +1,3 @@
+echo "getting jars, remove them back by running ./rmjars.sh"
+cp ../tutorials/programming-clojure/lib/commons-io-1.4.jar ../tutorials/programming-clojure/lib/commons-fileupload-1.2.1.jar ../tutorials/programming-clojure/lib/commons-codec-1.3.jar ../tutorials/programming-clojure/lib/clojure.jar ../tutorials/programming-clojure/lib/clojure-contrib.jar ../tutorials/programming-clojure/lib/compojure.jar ../tutorials/programming-clojure/lib/hsqldb.jar ../tutorials/programming-clojure/lib/jetty-6.1.14.jar ../tutorials/programming-clojure/lib/jetty-util-6.1.14.jar ../tutorials/programming-clojure/lib/servlet-api-2.5-6.1.14.jar ./lib
+cp -R ../tutorials/programming-clojure/public/* public/
