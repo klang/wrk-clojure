@@ -2,9 +2,12 @@
 	 :subprotocol "hsqldb"
 	 :subname "file:/home/klang/wrk-clojure/exampels/p252.db"
 	 })
-;	 :subname "c:/klang/wrk-clojure/examples/p252.db"
-;	 :subname "file:c:/klang/wrk-clojure/examples/p252.db"
-;	 :subname "file:c:\\klang\\wrk-clojure\\examples\\p252.db"
+
+
+(def db {:classname "org.hsqldb.jdbcDriver"
+	 :subprotocol "hsqldb"
+	 :subname "c:/klang/wrk-clojure/examples/p252.db"
+	 })
 
 (use 'clojure.contrib.sql)
 
