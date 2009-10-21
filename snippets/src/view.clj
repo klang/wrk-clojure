@@ -43,6 +43,8 @@
   (POST "/" (create-snippet (:body params)))
   (ANY "*" (page-not-found)))
 
-(run-server {:port 8080}
-	    "/*" (servlet snippet-app))
+(defserver snippet-server {:port 8080}
+  "/*" (servlet snippet-app))
 
+(start snippet-server)
+;; (stop snippet-server)
