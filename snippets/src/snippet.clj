@@ -1,7 +1,8 @@
-(ns snippet)
+(ns snippet
+  (:use clojure.contrib.sql))
 
 ; START: create-snippets
-(use 'clojure.contrib.sql)
+;;(use 'clojure.contrib.sql)
 (defn create-snippets []
   (create-table :snippets
     [:id :int "IDENTITY" "PRIMARY KEY"]

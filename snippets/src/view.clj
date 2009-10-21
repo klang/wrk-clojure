@@ -1,11 +1,10 @@
 (ns view
-  (:use compojure snippet))
+  (:use clojure.contrib.sql compojure snippet))
 
 (defn create-snippet [body]
   (if-let [id (insert-snippet body)]
     (redirect-to (str "/" id))
     (redirect-to "/")))
-(with-connection db (create-snippets))
 
 (defn layout [title & body]
   (html
