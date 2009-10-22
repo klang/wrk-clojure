@@ -32,8 +32,10 @@
    (drop-table :article) 
    (catch Exception e)))
 
+(comment
 (with-connection db (create-article-table))
 (with-connection db (drop-article-table))
+)
 
 (defn now [] (java.sql.Timestamp. (.getTime (java.util.Date.))))
 (defmulti coerce (fn [dest-class src-inst] [dest-class (class src-inst)]))
