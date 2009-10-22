@@ -15,6 +15,11 @@
          :subname      "production"
          :user         "postgres"})
 
+;; let us use the hsqldb for initial tests article.clj will set everything up
+(def db {:classname "org.hsqldb.jdbcDriver"
+         :subprotocol "hsqldb"
+         :subname "c:/klang/wrk-clojure/projects/journal-server/articles.db"})
+
 ; Performs a database query and returns the results as a list
 (defn sql-query [query]
   (sql/with-connection db
@@ -91,19 +96,19 @@
              (articles))]]))
 
 ; Mapping between URLs and view functions
-(servlet/defservlet journal-servlet
+(routes/defroutes journal-servlet
   "Eric Lavigne's Journal"
   (routes/ANY "/articles/"
     (view-article-list))
   (routes/ANY "/articles/:title"
-    (view-article (route :title)))
+    (view-article (params :title)))
   (routes/ANY "/*"
     (http-helpers/redirect-to "/articles/")))
 
 ; Server settings
 (jetty/defserver journal-server
   {:port 80}
-  "/*" journal-servlet)
+  "/*" (servlet/servlet journal-servlet))
 
 ; Command to start the server
 (jetty/start journal-server)
