@@ -18,10 +18,12 @@
          :subname "c:/klang/wrk-clojure/snippets/snippet.db"})
 ; END: db
 
+(comment
 (try 
  (with-connection db (create-snippets)) 
  (catch Exception e 
    (println "database already exist")))
+)
 
 (defn drop-snippets []
   (try
