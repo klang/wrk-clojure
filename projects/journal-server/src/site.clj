@@ -107,7 +107,7 @@
 
 ; Server settings
 (jetty/defserver journal-server
-  {:port 80}
+  {:port 8080}
   "/*" (servlet/servlet journal-servlet))
 
 ; Command to start the server
