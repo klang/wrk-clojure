@@ -23,9 +23,11 @@
 		    [:updated      :datetime ]
 		    [:published    :datetime ]))
 
+;; the actual value of db is decided in site.clj
 (def db {:classname "org.hsqldb.jdbcDriver"
          :subprotocol "hsqldb"
-         :subname "c:/klang/wrk-clojure/projects/journal-server/articles.db"})
+         ;;:subname "c:/klang/wrk-clojure/projects/journal-server/articles.db"
+         :subname "/home/klang/wrk-clojure/projects/journal-server/articles.db"})
 
 (defn drop-article-table [] 
   (try 
