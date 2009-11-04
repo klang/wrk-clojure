@@ -35,8 +35,8 @@
    (catch Exception e)))
 
 (comment
-(sql/with-connection db (create-article-table))
 (sql/with-connection db (drop-article-table))
+(sql/with-connection db (create-article-table))
 )
 
 (defn now [] (java.sql.Timestamp. (.getTime (java.util.Date.))))
@@ -96,8 +96,8 @@
 	 [title description body timestamp timestamp nil])
 	(last-created-id)))))
 
+;; functions to insert sample data
 
-(comment 
 (defn insert-more-samples []
   (let [timestamp (now)]
     (insert-article 
@@ -106,18 +106,18 @@
     (insert-article        
      "Article 4" "My fourth article" 
       "<p>Paragraph 1 in article 4</p><p>Another paragraph</p>")))
-)
 
-(comment
 (defn sample-more-articles []
   (sql/with-connection db
     (drop-article-table)
     (create-article-table)
     (insert-samples)
     (insert-more-samples)))
-)
 
+;; populate the database with sample data
 
-
+(sql/with-connection db (drop-article-table))
+(sql/with-connection db (create-article-table))
+(sample-more-articles)
 
 
