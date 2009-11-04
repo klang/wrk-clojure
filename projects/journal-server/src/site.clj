@@ -18,7 +18,8 @@
 ;; let us use the hsqldb for initial tests article.clj will set everything up
 (def db {:classname "org.hsqldb.jdbcDriver"
          :subprotocol "hsqldb"
-         :subname "c:/klang/wrk-clojure/projects/journal-server/articles.db"})
+         ;;:subname "c:/klang/wrk-clojure/projects/journal-server/articles.db"
+         :subname "/home/klang/wrk-clojure/projects/journal-server/articles.db"})
 
 ; Performs a database query and returns the results as a list
 (defn sql-query [query]
@@ -31,7 +32,7 @@
       (into [] res))))
 
 ; Fetches all articles
-(defn articles []
+(defn fetch-articles []
   (sql-query "select * from article"))
 
 ; Converts "My Article" to "my-article" for use in URL
@@ -48,7 +49,7 @@
       (article :title))))
 
 ; Fetch an article with the given title
-(defn article [title]
+(defn fetch-article [title]
   (first
     (filter
       (fn [art]
@@ -57,7 +58,7 @@
             title)
           (article-title-to-url-name
             (art :title))))
-      (articles))))
+      (fetch-articles))))
 
 ; HTML page for an article
 (defn render-article [article]
@@ -71,7 +72,7 @@
 ; Search for article by title, return HTML or redirect
 (defn view-article [title]
   (try
-    (render-article (article title))
+    (render-article (fetch-article title))
     (catch Exception ex
       (http-helpers/redirect-to "/articles/"))))
 
@@ -84,26 +85,21 @@
 ; HTML page that lists all articles
 (defn view-article-list []
   (html/html
-    [:head [:title "Articles"]]
-    [:body
-      [:dl (mapcat
-             (fn [article]
-               (list
-                 [:dt (render-article-link
-                        article)]
-                 [:dd (article
-                        :description)]))
-             (articles))]]))
+   [:head [:title "Articles"]]
+   [:body
+    [:dl (mapcat
+	  (fn [article]
+	    (list
+	     [:dt (render-article-link article)]
+	     [:dd (article :description)]))
+	  (fetch-articles))]]))
 
 ; Mapping between URLs and view functions
 (routes/defroutes journal-servlet
   "Eric Lavigne's Journal"
-  (routes/ANY "/articles/"
-    (view-article-list))
-  (routes/ANY "/articles/:title"
-    (view-article (params :title)))
-  (routes/ANY "/*"
-    (http-helpers/redirect-to "/articles/")))
+  (routes/ANY "/articles/" (view-article-list))
+  (routes/ANY "/articles/:title" (view-article (params :title)))
+  (routes/ANY "/*" (http-helpers/redirect-to "/articles/")))
 
 ; Server settings
 (jetty/defserver journal-server
