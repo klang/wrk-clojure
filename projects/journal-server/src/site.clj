@@ -101,10 +101,3 @@
   (routes/ANY "/articles/:title" (view-article (params :title)))
   (routes/ANY "/*" (http-helpers/redirect-to "/articles/")))
 
-; Server settings
-(jetty/defserver journal-server
-  {:port 8080}
-  "/*" (servlet/servlet journal-servlet))
-
-; Command to start the server
-(jetty/start journal-server)
