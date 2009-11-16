@@ -11,7 +11,8 @@
        [:p {:id "flash"} (flash :message)])
      (if (session :login)
        [:p "Hi, you are currently logged in! "
-        (link-to "/logout" "[Logout]")])
+        (link-to "/logout" "[Logout]")]
+       [:p "Hi, you are not currently logged in! " (link-to "/login" "[Login]")])
      [:div {:class "right"}]]]))
 
 (defn login-view
@@ -22,7 +23,7 @@
     (submit-button "Login"))))
 
 (def *password* "secret")
-(def *my-port* 8081)
+(def *my-port* 8082)
 
 
 (defn login-controller
@@ -60,6 +61,9 @@
 
 (defn up []
   (start myserver))
- 
+
 (defn down []
   (stop myserver))
+
+;; (up)
+;; (down)
