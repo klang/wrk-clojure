@@ -7,4 +7,4 @@
 
 ; Command to start the server
 (jetty/start journal-server)
-(jetty/stop journal-server)
+;(jetty/stop journal-server)

@@ -24,23 +24,41 @@
   (routes/GET "/login/" (login-view session))
   (routes/ANY "/*" (go-home)))
 
+(use 'compojure.control 'compojure.http.session)
+
+(decorate journal-servlet
+          (with-session {:type :memory, :expires 600}))
+ 
+;;;;
+
 (defn login-controller [session params]
   (html/html "hello there " (params :name) 
 	     " " (= "secret" (params :password))
 	     " " (.matches (params :name) "[\\w\\s\\-]+")
-	     (dosync (alter session assoc :name (params :name)))
-	     "session set to " (session :name)
+	     ;(dosync (alter session assoc :name (params :name)))
+	     [(session-assoc :name (params :name))]
+	     " session name set to " (read-session :name)
 	     ))
 
-;; there is no fucking session!
+(defn show-name [session]
+  (html/html "hello there " (session :name)))
+
 
 (routes/defroutes journal-servlet
   "Eric Lavigne's Journal"
   (routes/ANY "/articles/" (view-article-list session))
   (routes/ANY "/articles/:title" (view-article session (params :title)))
   (routes/GET "/login/" (login-view session))
+  (routes/GET "/show/" (show-name session))
   (routes/POST "/login/" (login-controller session params))
   (routes/ANY "/*" (go-home)))
+
+(decorate journal-servlet
+          (with-session {:type :memory, :expires 600}))
+ 
+;;; at least the session works now, but does not seem to contain anything
+;; TODO: the rest
+
 
 (defn login-controller [session params]
   (dosync
