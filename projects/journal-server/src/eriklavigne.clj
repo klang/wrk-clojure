@@ -128,14 +128,14 @@
         ; spaces, underscores, and hyphens.
         (.matches (params :name) "[\\w\\s\\-]+"))
       (do
-        (session-assoc :login true :name (params :name))
-        (go-home))
+        [(session-assoc :login true :name (params :name))
+	 (go-home)])
       (redirect-to "/login/"))))
 
 (defn logout-controller [session]
   (dosync
-    (session-dissoc :login :name)
-    (go-home)))
+    [(session-dissoc :login :name)
+     (go-home)]))
 
 (defn ensure-admin-controller [session]
   (dosync
