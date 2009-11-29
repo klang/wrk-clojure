@@ -1,6 +1,8 @@
 (ns ericlavigne
   (:use compojure.http)
   (:use compojure.html)
+  (:require [compojure.http.servlet :as servlet])
+  (:require [compojure.http.routes :as routes])
   (:require [compojure.server.jetty :as jetty])
   (:require [clojure.contrib.sql :as sql]))
 
@@ -23,9 +25,14 @@
          :subname      "production"
          :user         "postgres"})
 
+(def db {:classname "org.hsqldb.jdbcDriver"
+         :subprotocol "hsqldb"
+         ;;:subname "c:/klang/wrk-clojure/projects/journal-server/articles.db"
+         :subname "/home/klang/wrk-clojure/projects/journal-server/articles.db"})
+
 (defn sql-query [query]
   (sql/with-connection db
-    (sql/with-results res
+    (sql/with-query-results res
       query (into [] res))))
 
 (defn fetch-articles []
@@ -135,11 +142,11 @@
 
 ; Routing
 
-(defservlet journal-servlet
+(routes/defroutes journal-servlet
   "URL routing for Eric Lavigne's Journal"
   (ANY "/articles/" (view-article-list session))
   (ANY "/articles/:title"
-    (view-article session (route :title)))
+    (view-article session (params :title)))
   (GET "/login/" (login-view session))
   (POST "/login/" (login-controller session params))
   (ANY "/logout/" (logout-controller session))
@@ -151,6 +158,6 @@
 
 (jetty/defserver journal-server
   {:port 8080}
-  "/*" journal-servlet)
+  "/*" (servlet/servlet journal-servlet))
 
 (jetty/start journal-server)
