@@ -37,9 +37,7 @@
 
 ; Converts "My Article" to "my-article" for use in URL
 (defn article-title-to-url-name [title]
-  (.replaceAll
-    (.toLowerCase title)
-    "[^a-z0-9]+" "-"))
+  (.replaceAll (.toLowerCase title) "[^a-z0-9]+" "-"))
 
 ; Converts map of article attributes to a URL
 (defn article-url [article]
@@ -54,10 +52,8 @@
     (filter
       (fn [art]
         (=
-          (article-title-to-url-name
-            title)
-          (article-title-to-url-name
-            (art :title))))
+          (article-title-to-url-name title)
+          (article-title-to-url-name (art :title))))
       (fetch-articles))))
 
 ; HTML page for an article
