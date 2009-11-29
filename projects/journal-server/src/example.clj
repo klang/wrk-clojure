@@ -10,7 +10,7 @@
      (if (flash :message)
        [:p {:id "flash"} (flash :message)])
      (if (session :login)
-       [:p "Hi, you are currently logged in! "
+       [:p "Hi, " (session :name) ", you are currently logged in! "
         (link-to "/logout" "[Logout]")]
        [:p "Hi, you are not currently logged in! " (link-to "/login" "[Login]")])
      [:div {:class "right"}]]]))
@@ -19,7 +19,8 @@
   [params session]
   (html
    (form-to [:post "/login"]
-    (text-field :password)
+    (text-field :name)
+    (password-field :password)
     (submit-button "Login"))))
 
 (def *password* "secret")
@@ -29,14 +30,16 @@
 (defn login-controller
   [params session]
   (if (= (params :password) *password*)
-    [(session-assoc :login true)
+    [(session-assoc :login true 
+		    :name (params :name))
      (redirect-to "/")]
     [(flash-assoc :message "Incorrect Password.")
      (redirect-to "/")]))
  
 (defn logout
   [session]
-  [(session-assoc :login false)
+  [(session-assoc :login false 
+		  :name nil)
   (redirect-to "/")])
 
 (defn not-found
