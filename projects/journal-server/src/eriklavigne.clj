@@ -1,7 +1,7 @@
 (ns ericlavigne
   (:use compojure.http)
   (:use compojure.html)
-  (:require [compojure.jetty :as jetty])
+  (:require [compojure.server.jetty :as jetty])
   (:require [clojure.contrib.sql :as sql]))
 
 (defn article-title-to-url-name [title]
