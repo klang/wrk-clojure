@@ -1,10 +1,13 @@
 (ns ericlavigne
   (:use compojure.http)
   (:use compojure.html)
+  (:use compojure.control)
+  (:use compojure.http.session)
   (:require [compojure.http.servlet :as servlet])
   (:require [compojure.http.routes :as routes])
   (:require [compojure.server.jetty :as jetty])
   (:require [clojure.contrib.sql :as sql]))
+
 
 (defn article-title-to-url-name [title]
   (.replaceAll (.toLowerCase title) "[^a-z0-9]+" "-"))
@@ -33,7 +36,7 @@
 (defn sql-query [query]
   (sql/with-connection db
     (sql/with-query-results res
-      query (into [] res))))
+      [query] (into [] res))))
 
 (defn fetch-articles []
   (sql-query "select * from article"))
@@ -70,15 +73,15 @@
       body
       (dosync
         (cond
-          (not (@session :name))
+          (not (session :name))
             [:p (link-to "/login/" "Log in")]
-          (= (@session :name) "admin")
+          (= (session :name) "admin")
             [:div
               [:p (link-to "/admin/" "Admin page")]
               [:p (link-to "/logout/" "Log out admin")]]
           :else
             [:p (link-to "/logout/"
-                  (str "Log out " (@session :name)))]))]))
+                  (str "Log out " (session :name)))]))]))
 
 ; Views
 
@@ -125,18 +128,18 @@
         ; spaces, underscores, and hyphens.
         (.matches (params :name) "[\\w\\s\\-]+"))
       (do
-        (alter session assoc :name (params :name))
+        (session-assoc :login true :name (params :name))
         (go-home))
       (redirect-to "/login/"))))
 
 (defn logout-controller [session]
   (dosync
-    (alter session assoc :name nil)
+    (session-dissoc :login :name)
     (go-home)))
 
 (defn ensure-admin-controller [session]
   (dosync
-    (if (and (@session :name) (= (@session :name) "admin"))
+    (if (and (session :name) (= (session :name) "admin"))
       :next
       (go-home))))
 
@@ -153,6 +156,9 @@
   (ANY "/*" (ensure-admin-controller session))
   (ANY "/admin/" (admin-view session))
   (ANY "/*" (go-home)))
+
+(decorate journal-servlet
+          (with-session {:type :memory, :expires 600}))
 
 ; Starting the service
 
