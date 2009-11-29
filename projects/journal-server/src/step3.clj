@@ -2,6 +2,8 @@
 
 (load-file "./src/step2.clj")
 
+(use 'compojure.control 'compojure.http.session)
+
 (defn login-view [session]
   (page session "Log in"
     [:form {:method "post"}
@@ -13,70 +15,54 @@
         [:br]
       [:input {:type "submit" :value "Log in"}]]))
 
-;; we are going to end up sending a lot of requests to the main page
-(defn go-home []
-  (http-helpers/redirect-to "/articles/"))
-
+;; make sure that there is a /login/, when linking to that route in 'page'
 (routes/defroutes journal-servlet
   "Eric Lavigne's Journal"
   (routes/ANY "/articles/" (view-article-list session))
   (routes/ANY "/articles/:title" (view-article session (params :title)))
   (routes/GET "/login/" (login-view session))
-  (routes/ANY "/*" (go-home)))
-
-(use 'compojure.control 'compojure.http.session)
+  (routes/ANY "/*" (http-helpers/redirect-to "/articles/")))
 
 (decorate journal-servlet
           (with-session {:type :memory, :expires 600}))
- 
-;;;;
 
-(defn login-controller [session params]
-  (html/html "hello there " (params :name) 
-	     " " (= "secret" (params :password))
-	     " " (.matches (params :name) "[\\w\\s\\-]+")
-	     ;(dosync (alter session assoc :name (params :name)))
-	     [(session-assoc :name (params :name))]
-	     " session name set to " (read-session :name)
-	     ))
+(defn page [session title body]
+  (html/html
+    [:html
+      [:head [:title title]]
+      [:body [:h1 title] body
+       [:p
+	(if (session :login)
+	  (html/link-to "/logout/"
+			(str "Log out " (session :name)))
+	  (html/link-to "/login/" "Log in"))]]]))
 
-(defn show-name [session]
-  (html/html "hello there " (session :name)))
+;; link to login shows up nicely, login in works, but posted data is not saved
 
+(defn login-controller
+  [session params]
+  (if (= (params :password) "secret")
+    [(session-assoc :login true 
+		    :name (params :name))
+     (http-helpers/redirect-to "/articles/")]
+    [(http-helpers/redirect-to "/login/")]))
 
 (routes/defroutes journal-servlet
   "Eric Lavigne's Journal"
   (routes/ANY "/articles/" (view-article-list session))
   (routes/ANY "/articles/:title" (view-article session (params :title)))
   (routes/GET "/login/" (login-view session))
-  (routes/GET "/show/" (show-name session))
   (routes/POST "/login/" (login-controller session params))
-  (routes/ANY "/*" (go-home)))
+  (routes/ANY "/*" (http-helpers/redirect-to "/articles/")))
 
 (decorate journal-servlet
           (with-session {:type :memory, :expires 600}))
- 
-;;; at least the session works now, but does not seem to contain anything
-;; TODO: the rest
 
-
-(defn login-controller [session params]
-  (dosync
-    (if
-      (and
-        (= "secret" (params :password))
-        ; Username can include letters, numbers,
-        ; spaces, underscores, and hyphens.
-        (.matches (params :name) "[\\w\\s\\-]+"))
-      (do
-        (alter session assoc :name (params :name))
-        (go-home))
-      (http-helpers/redirect-to "/login/"))))
+;; we can now log in .. but we cannot log out.
 
 (defn logout-controller [session]
-  (dosync
-    (alter session assoc :name nil)
-    (go-home)))
+  [(session-dissoc :login :name)
+  (http-helpers/redirect-to "/login/")])
 
 (routes/defroutes journal-servlet
   "Eric Lavigne's Journal"
@@ -85,4 +71,7 @@
   (routes/GET "/login/" (login-view session))
   (routes/POST "/login/" (login-controller session params))
   (routes/ANY "/logout/" (logout-controller session))
-  (routes/ANY "/*" (go-home)))
+  (routes/ANY "/*" (http-helpers/redirect-to "/articles/")))
+
+(decorate journal-servlet
+          (with-session {:type :memory, :expires 600}))
