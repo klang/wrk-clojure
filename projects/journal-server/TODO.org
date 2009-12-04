@@ -1,0 +1,5 @@
+last step: prettyfying .. 
+
+add:
+(defn go-home []
+  (http-helpers/redirect-to "/articles/"))
