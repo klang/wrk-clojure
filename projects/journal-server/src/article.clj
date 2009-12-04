@@ -26,8 +26,8 @@
 ;; the actual value of db is decided in site.clj
 (def db {:classname "org.hsqldb.jdbcDriver"
          :subprotocol "hsqldb"
-         ;;:subname "c:/klang/wrk-clojure/projects/journal-server/articles.db"
-         :subname "/home/klang/wrk-clojure/projects/journal-server/articles.db"})
+         ;;:subname "c:/tmp/articles.db"
+         :subname "/tmp/articles.db"})
 
 (defn drop-article-table [] 
   (try 
