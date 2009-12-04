@@ -1,0 +1,11 @@
+(defproject helloworld "0.1"
+  :description "A build tool designed not to set your hair on fire."
+  :url "http://github.com/technomancy/leiningen"
+  :dependencies [[org.clojure/clojure "1.1.0-alpha-SNAPSHOT"]
+                 [org.clojure/clojure-contrib "1.0-SNAPSHOT"]
+;                 [ant/ant-launcher "1.6.2"]
+;                 [org.apache.maven/maven-ant-tasks "2.0.10"]
+		 ]
+  :dev-dependencies [[org.clojure/swank-clojure "1.0"]]
+  :main helloworld)
+

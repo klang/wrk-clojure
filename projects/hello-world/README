@@ -1,0 +1,9 @@
+# http://zef.me/2470/building-clojure-projects-with-leiningen
+
+lein deps
+-> in emacs M-x swank-clojure-project
+
+or simply:
+lein compile
+lein uberjar
+java -jar helloworld.jar
